@@ -1,0 +1,7 @@
+{
+  "name": "FACEA AI - Universidad de Nariño",
+  "description": "Una plataforma de inteligencia artificial exclusiva para los estudiantes de la Facultad de Ciencias Económicas y Administrativas (FACEA) de la Universidad de Nariño, diseñada para potenciar el pensamiento crítico y el éxito académico.",
+  "requestFramePermissions": [
+    "microphone"
+  ]
+}
