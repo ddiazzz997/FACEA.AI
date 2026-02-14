@@ -10,43 +10,98 @@ interface LogoProps {
 }
 
 const Logo: React.FC<LogoProps> = ({ className = '', size = 'md', showSubtext = true, centered = false }) => {
-  const sizes = {
-    sm: { circles: 'w-1 h-1', text: 'text-xl', robot: 24, gap: 'gap-1' },
-    md: { circles: 'w-2 h-2', text: 'text-3xl', robot: 40, gap: 'gap-2' },
-    lg: { circles: 'w-4 h-4', text: 'text-5xl', robot: 64, gap: 'gap-4' }
-  };
-
-  const s = sizes[size];
+  // Ajuste de escala para un tamaño "término medio" ideal
+  const scale = size === 'lg' ? 1.3 : size === 'md' ? 0.85 : 0.55;
+  
+  // Dimensiones del contenedor del cluster
+  const containerWidth = 80 * scale;
+  const containerHeight = 100 * scale;
 
   return (
     <div className={`flex flex-col ${centered ? 'items-center' : 'items-start'} ${className}`}>
-      <div className={`flex items-center ${s.gap}`}>
-        {/* Red Circles Cluster */}
-        <div className="flex flex-col items-end gap-1 relative mr-2">
-          <div className={`${size === 'lg' ? 'w-8 h-8' : size === 'md' ? 'w-5 h-5' : 'w-3 h-3'} bg-[#D32F2F] rounded-full`}></div>
-          <div className="flex gap-1 items-center">
-              <div className={`${size === 'lg' ? 'w-6 h-6' : size === 'md' ? 'w-4 h-4' : 'w-2 h-2'} bg-[#D32F2F] rounded-full`}></div>
-              <div className={`${size === 'lg' ? 'w-12 h-12' : size === 'md' ? 'w-8 h-8' : 'w-5 h-5'} bg-[#D32F2F] rounded-full`}></div>
-          </div>
-          <div className="flex gap-1 items-end -mt-1">
-               <div className={`${size === 'lg' ? 'w-4 h-4' : size === 'md' ? 'w-3 h-3' : 'w-1.5 h-1.5'} bg-[#D32F2F] rounded-full`}></div>
-               <div className={`${size === 'lg' ? 'w-5 h-5' : size === 'md' ? 'w-4 h-4' : 'w-2.5 h-2.5'} bg-[#D32F2F] rounded-full`}></div>
-          </div>
+      <div className="flex items-center gap-2">
+        {/* Cluster de Círculos Rojos: Apareciendo desde el más pequeño hasta el más grande */}
+        <div 
+          className="relative mr-4" 
+          style={{ width: containerWidth, height: containerHeight }}
+        >
+          {/* Círculo 5: Rosado (Punta de la Espiral) - EL PRIMERO EN APARECER */}
+          <div 
+            className="absolute rounded-full bg-[#F06292] shadow-sm animate-logo-pop" 
+            style={{ 
+              width: 12 * scale, 
+              height: 12 * scale, 
+              top: 86 * scale, 
+              left: 56 * scale,
+              animationDelay: '0.1s'
+            }}
+          />
+          {/* Círculo 4: Rojo Claro (Base Curva) */}
+          <div 
+            className="absolute rounded-full bg-[#E53935] shadow-sm animate-logo-pop" 
+            style={{ 
+              width: 18 * scale, 
+              height: 18 * scale, 
+              top: 78 * scale, 
+              left: 30 * scale,
+              animationDelay: '0.25s'
+            }}
+          />
+          {/* Círculo 3: Rojo Vivo (Inferior Izquierda) */}
+          <div 
+            className="absolute rounded-full bg-[#D32F2F] shadow-sm animate-logo-pop" 
+            style={{ 
+              width: 24 * scale, 
+              height: 24 * scale, 
+              top: 58 * scale, 
+              left: 4 * scale,
+              animationDelay: '0.4s'
+            }}
+          />
+          {/* Círculo 2: Rojo Intenso (Medio Izquierdo) */}
+          <div 
+            className="absolute rounded-full bg-[#B22222] shadow-sm animate-logo-pop" 
+            style={{ 
+              width: 32 * scale, 
+              height: 32 * scale, 
+              top: 26 * scale, 
+              left: 0,
+              animationDelay: '0.55s'
+            }}
+          />
+          {/* Círculo 1: Granate (Superior Derecho) - EL ÚLTIMO EN APARECER */}
+          <div 
+            className="absolute rounded-full bg-[#8B1A1A] shadow-sm animate-logo-pop" 
+            style={{ 
+              width: 42 * scale, 
+              height: 42 * scale, 
+              top: 0, 
+              right: 4 * scale,
+              animationDelay: '0.7s'
+            }}
+          />
         </div>
 
-        {/* Text Part */}
-        <div className="flex items-center gap-2">
-          <h1 className={`${s.text} font-heading font-extrabold text-black tracking-tight leading-none`}>
-            Facea<span className="text-gray-600">.AI</span>
-          </h1>
-          <div className="p-1 bg-slate-100 rounded-2xl border border-slate-200 shadow-inner animate-float">
-            <Bot size={s.robot} className="text-slate-700" />
+        {/* Texto "Facea.AI" y Robot */}
+        <div className="flex items-center gap-4">
+          <div className="flex flex-col animate-in fade-in slide-in-from-left-4 duration-1000">
+            <h1 
+              className="font-heading font-light text-black tracking-tighter"
+              style={{ fontSize: (size === 'lg' ? 76 : size === 'md' ? 52 : 34) }}
+            >
+              Facea<span className="font-bold">.AI</span>
+            </h1>
+          </div>
+          
+          <div className="p-2 bg-slate-50 rounded-2xl border border-slate-100 shadow-sm animate-float hidden sm:block delay-700 animate-in fade-in duration-1000">
+            <Bot size={size === 'lg' ? 52 : size === 'md' ? 36 : 22} className="text-[#D32F2F]" />
           </div>
         </div>
       </div>
       
       {showSubtext && (
-        <p className={`text-[10px] md:text-sm font-medium text-slate-500 uppercase tracking-widest mt-2 ${centered ? 'text-center' : ''}`}>
+        <p className={`font-semibold text-black uppercase tracking-[0.25em] mt-2 ml-1 animate-in fade-in duration-1000 delay-1000 ${centered ? 'text-center' : ''}`}
+           style={{ fontSize: (size === 'lg' ? 14 : size === 'md' ? 11 : 8) }}>
           Academia Ciencia y Desarrollo
         </p>
       )}
