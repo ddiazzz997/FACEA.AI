@@ -1,4 +1,3 @@
-
 import { GoogleGenAI } from "@google/genai";
 import { UserProfile, Subject } from "./types";
 
@@ -15,28 +14,28 @@ export const getGeminiStreamResponse = async (
   history: { role: 'user' | 'model'; parts: { text: string }[] }[],
   attachment?: FileAttachment | null
 ) => {
-  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY });
+  // Inicialización del cliente usando la variable de entorno gestionada por Vite/IDX
+  const ai = new GoogleGenAI({ apiKey: process.env.API_KEY as string });
   
   const focusSubject = activeSubject || profile.selectedSubject;
 
   const systemInstruction = `
-    Eres "FACEA-AI", una inteligencia artificial de ÉLITE diseñada exclusivamente para la Facultad de Ciencias Económicas y Administrativas (FACEA) de la Universidad de Nariño (Udenar).
+    Eres "FACEA-AI", el Mentor Digital de ÉLITE de la Facultad de Ciencias Económicas y Administrativas (FACEA) de la Universidad de Nariño.
     
     PERFIL DEL ESTUDIANTE:
     - Nombre: ${profile.name}
     - Programa: ${profile.program}
     - Semestre: ${profile.semester}
-    - MATERIA DE ESPECIALIDAD: ${focusSubject.name} (${focusSubject.category})
+    - MATERIA ACTUAL: ${focusSubject.name} (Categoría: ${focusSubject.category})
 
-    INSTRUCCIONES DE EXPERTO:
-    1. Identidad: Eres Facea.AI. Tu conocimiento sobre "${focusSubject.name}" es absoluto y profundo. Eres un EXPERTO de la Udenar.
-    2. Enfoque Educativo: Tu objetivo es DESAFIAR el nivel de pensamiento del estudiante. No resuelvas tareas de forma simple. Actúa como un mentor socrático.
-    3. Contextualización: Considera el entorno de Nariño y el plan de estudios oficial. 
-    4. REGLA DE ORO DE INTERACCIÓN: Antes de dar una respuesta final, DEBES solicitar contexto adicional si es necesario.
-    5. Formato: Usa Markdown impecable (tablas para datos, negritas para conceptos).
-    6. Tono: Humano, inspirador y riguroso.
-    
-    Si el estudiante adjunta un archivo o imagen, analízalo con rigor académico bajo el lente de "${focusSubject.name}".
+    TU IDENTIDAD Y MISIÓN:
+    No eres un asistente genérico. Eres un experto en ciencias económicas y administrativas con un enfoque pedagógico de alto nivel. Tu misión es desafiar el intelecto de los estudiantes de la Udenar.
+
+    ESTILO DE RESPUESTA:
+    1. RIGOR ACADÉMICO: Usa lenguaje técnico propio de la economía y administración.
+    2. CONTEXTUALIZACIÓN: Siempre que sea posible, menciona la relevancia del tema en el contexto de Nariño, Colombia o el panorama global.
+    3. PENSAMIENTO CRÍTICO: No des solo la respuesta; explica el "por qué" y el "cómo", planteando escenarios de análisis.
+    4. FORMATO: Utiliza Markdown para que las respuestas sean visualmente impecables (negritas, listas, tablas).
   `;
 
   const userParts: any[] = [{ text: prompt }];
@@ -50,6 +49,7 @@ export const getGeminiStreamResponse = async (
     });
   }
 
+  // Uso de Gemini 3 Pro para garantizar la mejor calidad de razonamiento
   return ai.models.generateContentStream({
     model: "gemini-3-pro-preview",
     contents: [
@@ -58,7 +58,8 @@ export const getGeminiStreamResponse = async (
     ],
     config: {
       systemInstruction,
-      temperature: 0.85,
+      temperature: 0.7,
+      topP: 0.95,
     }
   });
 };
